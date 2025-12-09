@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Tippr.Application.Authentication.Queries.GetUserProfile;
 using Tippr.Application.Common;
 using Tippr.Application.DTOs.User;
+using Tippr.Application.Users.Commands.ChangePassword;
 using Tippr.Application.Users.Commands.UpdateProfile;
 
 namespace Tippr.API.Controllers
@@ -54,6 +55,23 @@ namespace Tippr.API.Controllers
 
             if (!result.Success)
                 return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpPut("me/password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+        {
+            var userId = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(ApiResponse<string>.FailureResponse("invalid token", new[] { "invalid token" }));
+            }
+
+            var secureCommand = command with { UserId = userId };
+
+            var result = await _mediator.Send(secureCommand);
 
             return Ok(result);
         }
