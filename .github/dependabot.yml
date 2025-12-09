@@ -2,7 +2,7 @@ version: 2
 updates:
   # .NET dependencies
   - package-ecosystem: "nuget"
-    directory: "/src"
+    directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -13,10 +13,15 @@ updates:
       - "area: backend"
     assignees:
       - "davidperjans"
+    ignore:
+      - dependency-name: "Microsoft.*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "System.*"
+        update-types: ["version-update:semver-major"]
 
   # npm dependencies (frontend)
   - package-ecosystem: "npm"
-    directory: "/src/client"
+    directory: "/src/Client/tippr-client"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -27,6 +32,11 @@ updates:
       - "area: frontend"
     assignees:
       - "davidperjans"
+    ignore:
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
