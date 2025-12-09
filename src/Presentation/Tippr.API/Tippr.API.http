@@ -1,0 +1,6 @@
+@Tippr.API_HostAddress = http://localhost:5136
+
+GET {{Tippr.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
