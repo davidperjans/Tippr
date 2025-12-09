@@ -1,0 +1,39 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'src/Client/**'
+      - '.github/workflows/frontend-ci.yml'
+  pull_request:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'src/Client/**'
+
+jobs:
+  build-frontend:
+    name: Build React App
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: src/Client/tippr-client/package-lock.json
+
+    - name: Install dependencies
+      working-directory: src/Client/tippr-client
+      run: npm ci
+
+    - name: Lint
+      working-directory: src/Client/tippr-client
+      run: npm run lint
+
+    - name: Build
+      working-directory: src/Client/tippr-client
+      run: npm run build
