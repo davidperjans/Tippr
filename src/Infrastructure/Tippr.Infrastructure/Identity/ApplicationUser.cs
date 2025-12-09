@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Tippr.Domain.Common;
+using Tippr.Domain.Entities;
 
 namespace Tippr.Infrastructure.Identity
 {
@@ -11,5 +12,8 @@ namespace Tippr.Infrastructure.Identity
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt {  get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+        public ICollection<Prediction> Predictions { get; set; } = new List<Prediction>();
     }
 }
