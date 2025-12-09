@@ -44,12 +44,12 @@ namespace Tippr.API.Tests.Controllers
 
             // 3. GET PROFILE (Protected Route)
             // Först utan token -> Ska ge 401
-            var unauthorizedResponse = await _client.GetAsync("/api/v1/Auth/me");
+            var unauthorizedResponse = await _client.GetAsync("/api/v1/User/me");
             unauthorizedResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 
             // Sen med token -> Ska ge 200 OK
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var meResponse = await _client.GetAsync("/api/v1/Auth/me");
+            var meResponse = await _client.GetAsync("/api/v1/User/me");
 
             meResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             var meResult = await meResponse.Content.ReadFromJsonAsync<ApiResponse<UserDto>>();
