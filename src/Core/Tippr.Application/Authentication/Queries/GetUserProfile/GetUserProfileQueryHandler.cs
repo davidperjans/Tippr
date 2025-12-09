@@ -1,20 +1,21 @@
 using MediatR;
 using Tippr.Application.DTOs.User;
+using Tippr.Application.Interfaces;
 
 namespace Tippr.Application.Authentication.Queries.GetUserProfile
 {
     public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserDto?>
     {
-        private readonly IAuthenticationService _authService;
+        private readonly IUserService _userService;
 
-        public GetUserProfileQueryHandler(IAuthenticationService authService)
+        public GetUserProfileQueryHandler(IUserService userService)
         {
-            _authService = authService;
+            _userService = userService;
         }
 
         public async Task<UserDto?> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
         {
-            return await _authService.GetUserProfileAsync(request.UserId);
+            return await _userService.GetUserProfileAsync(request.UserId);
         }
     }
 }

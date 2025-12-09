@@ -99,22 +99,6 @@ namespace Tippr.Infrastructure.Services
             return await GenerateAuthenticationResultForUserAsync(user);
         }
 
-        public async Task<UserDto?> GetUserProfileAsync(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null) return null;
-
-            return new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email!,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                ProfilePictureUrl = user.ProfilePictureUrl,
-            };
-        }
-
         // --- Helper methods ---
         private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(ApplicationUser user)
         {

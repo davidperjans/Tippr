@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Tippr.Application.Authentication;
+using Tippr.Application.Interfaces;
 using Tippr.Infrastructure.Data;
 using Tippr.Infrastructure.Identity;
 using Tippr.Infrastructure.Services;
@@ -26,6 +27,7 @@ namespace Tippr.Infrastructure
             //                      Services
             // ===================================================
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IUserService, UserService>();
 
 
             // ===================================================

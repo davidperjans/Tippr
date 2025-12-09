@@ -54,24 +54,5 @@ namespace Tippr.API.Controllers
 
             return Ok(ApiResponse<AuthenticationResult>.SuccessResponse(result, "Token refreshed"));
         }
-
-        [HttpGet("me")]
-        [Authorize]
-        public async Task<ActionResult<ApiResponse<UserDto>>> GetMe()
-        {
-            var userId = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(ApiResponse<string>.FailureResponse("invalid token", new[] { "invalid token" }));
-            }
-
-            var userDto = await _mediator.Send(new GetUserProfileQuery(userId));
-
-            if (userDto == null)
-                return NotFound(ApiResponse<string>.FailureResponse("user not found", new[] { "User not found" }));
-
-            return Ok(ApiResponse<UserDto>.SuccessResponse(userDto));
-        }
     }
 }
