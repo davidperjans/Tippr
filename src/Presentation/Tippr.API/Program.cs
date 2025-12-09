@@ -86,8 +86,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -99,6 +97,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("ProductionPolicy");
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -118,3 +118,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+public partial class Program { }
