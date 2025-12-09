@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Tippr.API.Middleware;
 using Tippr.Application;
 using Tippr.Infrastructure;
 
@@ -66,7 +67,8 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
