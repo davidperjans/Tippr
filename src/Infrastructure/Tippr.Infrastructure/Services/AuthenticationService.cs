@@ -1,3 +1,4 @@
+using Azure.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +7,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Tippr.Application.Authentication;
+using Tippr.Application.Authentication.Common;
+using Tippr.Application.DTOs.User;
 using Tippr.Infrastructure.Identity;
 
 namespace Tippr.Infrastructure.Services
@@ -94,6 +97,22 @@ namespace Tippr.Infrastructure.Services
             }
 
             return await GenerateAuthenticationResultForUserAsync(user);
+        }
+
+        public async Task<UserDto?> GetUserProfileAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null) return null;
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email!,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+            };
         }
 
         // --- Helper methods ---

@@ -49,13 +49,23 @@ namespace Tippr.API.Middleware
                     statusCode = StatusCodes.Status401Unauthorized;
                     message = "unauthorized access";
                     break;
+
+                default:
+                    statusCode = StatusCodes.Status500InternalServerError;
+                    message = exception.Message;
+                    break;
             }
 
             // Create answer
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
 
-            var response = ApiResponse<object>.FailureResponse(message, errors);
+            var response = ApiResponse<object>.FailureResponse(message, errors ?? new List<string> { message });
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
 
             var json = JsonSerializer.Serialize(response);
             await context.Response.WriteAsync(json);

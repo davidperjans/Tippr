@@ -1,4 +1,4 @@
-namespace Tippr.Application.Authentication
+namespace Tippr.Application.Authentication.Common
 {
     public class AuthenticationResult
     {
