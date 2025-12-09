@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { User, LoginRequest, RegisterRequest } from '../../types/auth';
 import authService from '../../services/api/authService';
+import { AxiosError } from 'axios';
 
 interface AuthState {
   user: User | null;
@@ -8,6 +9,11 @@ interface AuthState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+}
+
+interface ApiErrorResponse {
+  errors?: string[];
+  message?: string;
 }
 
 // Läs token vid start
@@ -28,8 +34,8 @@ export const login = createAsyncThunk(
     try {
       const response = await authService.login(credentials);
       return response.data; // Detta innehåller { token, refreshToken, user }
-    } catch (error: any) {
-      // Om backend skickar felmeddelande, fånga det här
+    } catch (err) {
+      const error = err as AxiosError<ApiErrorResponse>
       return rejectWithValue(error.response?.data?.errors?.[0] || 'Login failed');
     }
   }
@@ -42,7 +48,8 @@ export const register = createAsyncThunk(
     try {
       const response = await authService.register(data);
       return response.data;
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as AxiosError<ApiErrorResponse>
       return rejectWithValue(error.response?.data?.errors?.[0] || 'Registration failed');
     }
   }
