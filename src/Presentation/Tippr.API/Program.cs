@@ -65,6 +65,25 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevelopmentPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+
+    options.AddPolicy("ProductionPolicy", policy =>
+    {
+        // I produktion vill vi vara striktare
+        policy.WithOrigins("https://din-domän.com")
+              .AllowAnyHeader()
+              .WithMethods("GET", "POST", "PUT", "DELETE");
+    });
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -73,7 +92,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseCors("DevelopmentPolicy");
 }
+
+app.UseCors("ProductionPolicy");
 
 app.UseHttpsRedirection();
 
