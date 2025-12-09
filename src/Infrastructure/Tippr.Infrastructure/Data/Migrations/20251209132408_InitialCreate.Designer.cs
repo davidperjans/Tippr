@@ -12,7 +12,7 @@ using Tippr.Infrastructure.Data;
 namespace Tippr.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251209131307_InitialCreate")]
+    [Migration("20251209132408_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

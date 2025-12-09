@@ -37,7 +37,8 @@ namespace Tippr.Infrastructure.Services
                 Email = email,
                 UserName = email,
                 FirstName = firstName,
-                LastName = lastName
+                LastName = lastName,
+                CreatedAt = DateTime.UtcNow
             };
 
             var createdUser = await _userManager.CreateAsync(newUser, password);
