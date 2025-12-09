@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tippr.Application.Authentication;
 using Tippr.Infrastructure.Data;
 using Tippr.Infrastructure.Identity;
+using Tippr.Infrastructure.Services;
 
 namespace Tippr.Infrastructure
 {
@@ -16,6 +18,12 @@ namespace Tippr.Infrastructure
             // ===================================================
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+
+            // ===================================================
+            //                      Services
+            // ===================================================
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
 
             // ===================================================
             //                      Identity

@@ -36,6 +36,8 @@ namespace Tippr.Infrastructure.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -241,11 +243,17 @@ namespace Tippr.Infrastructure.Data.Migrations
                     GroupId = table.Column<int>(type: "int", nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     TotalPoints = table.Column<int>(type: "int", nullable: false),
-                    JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserGroups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserGroups_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_UserGroups_Groups_GroupId",
                         column: x => x.GroupId,
@@ -307,11 +315,17 @@ namespace Tippr.Infrastructure.Data.Migrations
                     PointsEarned = table.Column<int>(type: "int", nullable: false),
                     IsLocked = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Predictions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Predictions_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Predictions_Groups_GroupId",
                         column: x => x.GroupId,
@@ -386,6 +400,11 @@ namespace Tippr.Infrastructure.Data.Migrations
                 column: "TournamentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Predictions_ApplicationUserId",
+                table: "Predictions",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Predictions_GroupId",
                 table: "Predictions",
                 column: "GroupId");
@@ -399,6 +418,11 @@ namespace Tippr.Infrastructure.Data.Migrations
                 name: "IX_Teams_TournamentId",
                 table: "Teams",
                 column: "TournamentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroups_ApplicationUserId",
+                table: "UserGroups",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserGroups_GroupId",
@@ -434,10 +458,10 @@ namespace Tippr.Infrastructure.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Matches");
 
             migrationBuilder.DropTable(
-                name: "Matches");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Groups");
