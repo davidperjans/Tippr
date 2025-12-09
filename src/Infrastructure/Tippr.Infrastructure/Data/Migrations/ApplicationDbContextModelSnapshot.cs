@@ -254,6 +254,9 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("AwayTeamScore")
                         .HasColumnType("int");
 
@@ -283,6 +286,8 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("GroupId");
 
@@ -372,6 +377,9 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
@@ -389,6 +397,8 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("GroupId");
 
@@ -453,6 +463,12 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -567,6 +583,10 @@ namespace Tippr.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tippr.Domain.Entities.Prediction", b =>
                 {
+                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("Predictions")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Tippr.Domain.Entities.Group", "Group")
                         .WithMany("Predictions")
                         .HasForeignKey("GroupId")
@@ -597,6 +617,10 @@ namespace Tippr.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Tippr.Domain.Entities.UserGroup", b =>
                 {
+                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("UserGroups")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Tippr.Domain.Entities.Group", "Group")
                         .WithMany("UserGroups")
                         .HasForeignKey("GroupId")
@@ -620,6 +644,13 @@ namespace Tippr.Infrastructure.Data.Migrations
                     b.Navigation("Matches");
 
                     b.Navigation("Teams");
+                });
+
+            modelBuilder.Entity("Tippr.Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("Predictions");
+
+                    b.Navigation("UserGroups");
                 });
 #pragma warning restore 612, 618
         }

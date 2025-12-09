@@ -13,6 +13,9 @@ namespace Tippr.Infrastructure.Identity
         public DateTime CreatedAt {  get; set; }
         public DateTime? UpdatedAt { get; set; }
 
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
+
         public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
         public ICollection<Prediction> Predictions { get; set; } = new List<Prediction>();
     }
