@@ -5,6 +5,7 @@ namespace Tippr.Domain.Entities
     public class Group : BaseEntity, IAuditableEntity
     {
         public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public string JoinCode { get; set; } = string.Empty; // Unik kod för att gå med
         public int? MaxMembers { get; set; }
 

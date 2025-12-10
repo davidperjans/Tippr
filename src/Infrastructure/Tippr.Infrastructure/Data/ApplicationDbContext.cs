@@ -20,12 +20,6 @@ namespace Tippr.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-
-            modelBuilder.Entity<Prediction>()
-                .HasOne(p => p.Match)
-                .WithMany()
-                .HasForeignKey(p => p.MatchId)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

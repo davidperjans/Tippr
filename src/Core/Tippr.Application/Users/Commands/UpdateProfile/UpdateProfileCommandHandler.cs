@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tippr.Application.Common;
 using Tippr.Application.DTOs.User;
-using Tippr.Application.Interfaces;
+using Tippr.Application.Interfaces.Services;
 
 namespace Tippr.Application.Users.Commands.UpdateProfile
 {

@@ -6,9 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Tippr.Application.Authentication;
-using Tippr.Application.Interfaces;
+using Tippr.Application.Interfaces.Repos;
+using Tippr.Application.Interfaces.Services;
 using Tippr.Infrastructure.Data;
 using Tippr.Infrastructure.Identity;
+using Tippr.Infrastructure.Repositories;
 using Tippr.Infrastructure.Services;
 
 namespace Tippr.Infrastructure
@@ -22,6 +24,12 @@ namespace Tippr.Infrastructure
             // ===================================================
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+
+            // ===================================================
+            //                      Repositories
+            // ===================================================
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IGroupRepository, GroupRepository>();
 
             // ===================================================
             //                      Services
