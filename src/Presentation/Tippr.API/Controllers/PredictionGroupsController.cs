@@ -23,27 +23,21 @@ namespace Tippr.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Result<PredictionGroupDetailsDto>>> Create(
-        [FromBody] CreatePredictionGroupCommand command,
-        CancellationToken cancellationToken)
+        public async Task<ActionResult<Result<PredictionGroupDetailsDto>>> Create([FromBody] CreatePredictionGroupCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
             return ToActionResult(result);
         }
 
         [HttpPost("join")]
-        public async Task<ActionResult<Result>> Join(
-            [FromBody] JoinPredictionGroupByCodeCommand command,
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<Result>> Join([FromBody] JoinPredictionGroupByCodeCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
             return ToActionResult(result);
         }
 
         [HttpPost("{id:guid}/leave")]
-        public async Task<ActionResult<Result>> Leave(
-            Guid id,
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<Result>> Leave(Guid id, CancellationToken cancellationToken)
         {
             var command = new LeavePredictionGroupCommand(id);
             var result = await _mediator.Send(command, cancellationToken);
@@ -51,8 +45,7 @@ namespace Tippr.API.Controllers
         }
 
         [HttpGet("my")]
-        public async Task<ActionResult<Result<IReadOnlyCollection<PredictionGroupDto>>>> GetMyGroups(
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<Result<IReadOnlyCollection<PredictionGroupDto>>>> GetMyGroups(CancellationToken cancellationToken)
         {
             var query = new GetMyPredictionGroupsQuery();
             var result = await _mediator.Send(query, cancellationToken);
@@ -60,9 +53,7 @@ namespace Tippr.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<Result<PredictionGroupDetailsDto>>> GetDetails(
-            Guid id,
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<Result<PredictionGroupDetailsDto>>> GetDetails(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetPredictionGroupDetailsQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
