@@ -15,5 +15,9 @@ namespace Tippr.Application.Common.Interfaces.Repos
         Task<PredictionGroup?> GetByJoinCodeAsync(
             string joinCode,
             CancellationToken cancellationToken = default);
+
+        Task<bool> IsUniqueJoinCodeAsync(
+            string joinCode,
+            CancellationToken cancellationToken = default);
     }
 }

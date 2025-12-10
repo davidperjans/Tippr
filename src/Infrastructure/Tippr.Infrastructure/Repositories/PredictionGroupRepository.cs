@@ -38,5 +38,10 @@ namespace Tippr.Infrastructure.Repositories
                 .Include(g => g.Members)
                 .FirstOrDefaultAsync(g => g.Id == id, cancellationToken);
         }
+
+        public async Task<bool> IsUniqueJoinCodeAsync(string joinCode, CancellationToken cancellationToken = default)
+        {
+            return !await _dbSet.AnyAsync(g => g.JoinCode == joinCode, cancellationToken);
+        }
     }
 }

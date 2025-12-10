@@ -50,7 +50,7 @@ namespace Tippr.Application.Groups.Commands.CreateGroup
             if (tournament is null)
                 return Result<PredictionGroupDetailsDto>.Failure("Tournament not found.");
 
-            var joinCode = GenerateJoinCode();
+            var joinCode = await GenerateUniqueJoinCodeAsync();
 
             var group = new PredictionGroup
             {
@@ -113,9 +113,19 @@ namespace Tippr.Application.Groups.Commands.CreateGroup
             return Result<PredictionGroupDetailsDto>.Success(dto);
         }
 
-        private string GenerateJoinCode()
+        private async Task<string> GenerateUniqueJoinCodeAsync()
         {
-            return Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+
+            while (true)
+            {
+                var code = new string(Enumerable.Repeat(chars, 6)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+
+                if (await _groupRepository.IsUniqueJoinCodeAsync(code))
+                    return code;
+            }
         }
     }
 }
