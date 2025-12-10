@@ -1,23 +1,24 @@
 using MediatR;
-using Tippr.Application.Authentication.Commands.Login;
 using Tippr.Application.Authentication.Common;
+using Tippr.Application.Common;
+using Tippr.Application.Common.Interfaces.Services;
 
 namespace Tippr.Application.Authentication.Commands.RefreshToken
 {
-    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, AuthenticationResult>
+    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, Result<AuthResponseDto>>
     {
-        private readonly IAuthenticationService _authService;
-        public RefreshTokenCommandHandler(IAuthenticationService authService)
+        private readonly IAuthService _authService;
+
+        public RefreshTokenCommandHandler(IAuthService authService)
         {
             _authService = authService;
         }
 
-        public async Task<AuthenticationResult> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+        public Task<Result<AuthResponseDto>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            return await _authService.RefreshTokenAsync(
-                request.Token,
-                request.RefreshToken
-            );
+            return _authService.RefreshTokenAsync(
+                request.RefreshToken,
+                cancellationToken);
         }
     }
 }

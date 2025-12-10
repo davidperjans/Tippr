@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Tippr.Application.Authentication;
-using Tippr.Application.Interfaces.Repos;
-using Tippr.Application.Interfaces.Services;
+using Tippr.Application.Common.Interfaces.Repos;
+using Tippr.Application.Common.Interfaces.Services;
+using Tippr.Infrastructure.Auth;
 using Tippr.Infrastructure.Data;
 using Tippr.Infrastructure.Identity;
 using Tippr.Infrastructure.Repositories;
@@ -29,13 +29,16 @@ namespace Tippr.Infrastructure
             //                      Repositories
             // ===================================================
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IPredictionGroupRepository, PredictionGroupRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // ===================================================
             //                      Services
             // ===================================================
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IUserReadService, UserReadService>();
 
 
             // ===================================================
@@ -50,8 +53,9 @@ namespace Tippr.Infrastructure
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 8;
             })
-            .AddRoles<IdentityRole>() // Lägg till stöd för roller
-            .AddEntityFrameworkStores<ApplicationDbContext>() // Koppla till EF Core
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddSignInManager<SignInManager<ApplicationUser>>()
             .AddDefaultTokenProviders();
 
             services.AddDataProtection();
@@ -59,6 +63,8 @@ namespace Tippr.Infrastructure
             // ===================================================
             //                 JWT Configuration
             // ===================================================
+            services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+
             var jwtSettings = config.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
 

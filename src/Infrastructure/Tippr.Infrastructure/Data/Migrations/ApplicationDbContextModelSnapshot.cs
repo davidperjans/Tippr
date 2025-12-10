@@ -46,7 +46,7 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -71,7 +71,7 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -96,7 +96,7 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -118,7 +118,7 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -133,7 +133,7 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -152,99 +152,72 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Tippr.Domain.Entities.Group", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("JoinCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<int?>("MaxMembers")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("TournamentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("JoinCode")
-                        .IsUnique();
-
-                    b.HasIndex("TournamentId");
-
-                    b.ToTable("Groups");
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Tippr.Domain.Entities.Match", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("AwayScore")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("AwayTeamId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("AwayTeamId")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<int?>("AwayTeamScore")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("HomeTeamId")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("HomeScore")
                         .HasColumnType("int");
 
-                    b.Property<int?>("HomeTeamScore")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HomeTeamId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("MatchDate")
+                    b.Property<DateTime>("KickoffUtc")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("ParentMatchAwayId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentMatchHomeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Stadium")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Stage")
                         .HasColumnType("int");
 
-                    b.Property<int>("TournamentId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid?>("TournamentGroupId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Venue")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -252,175 +225,525 @@ namespace Tippr.Infrastructure.Data.Migrations
 
                     b.HasIndex("HomeTeamId");
 
-                    b.HasIndex("TournamentId");
+                    b.HasIndex("TournamentGroupId");
 
-                    b.ToTable("Matches");
+                    b.HasIndex("TournamentId", "KickoffUtc");
+
+                    b.ToTable("Matches", (string)null);
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.Prediction", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.MatchPrediction", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AwayTeamScore")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupId")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("PointsAwarded")
                         .HasColumnType("int");
 
-                    b.Property<int>("HomeTeamScore")
+                    b.Property<int>("PredictedAwayScore")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsLocked")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MatchId")
+                    b.Property<int>("PredictedHomeScore")
                         .HasColumnType("int");
 
-                    b.Property<int>("PointsEarned")
+                    b.Property<Guid?>("PredictionGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("SubmittedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("GroupId");
 
                     b.HasIndex("MatchId");
 
-                    b.ToTable("Predictions");
+                    b.HasIndex("PredictionGroupId");
+
+                    b.HasIndex("UserId", "MatchId", "PredictionGroupId")
+                        .IsUnique()
+                        .HasFilter("[PredictionGroupId] IS NOT NULL");
+
+                    b.ToTable("MatchPredictions", (string)null);
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.Team", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FlagUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GroupLetter")
-                        .HasMaxLength(1)
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ShortName")
+                    b.Property<string>("CreatedByUserId")
                         .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TournamentId")
-                        .HasColumnType("int");
+                    b.Property<string>("JoinCode")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("TournamentId");
-
-                    b.ToTable("Teams");
-                });
-
-            modelBuilder.Entity("Tippr.Domain.Entities.Tournament", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("HostCountry")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tournaments");
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("JoinCode")
+                        .IsUnique();
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("PredictionGroups", (string)null);
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.UserGroup", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroupMember", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("JoinedAt")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TotalPoints")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("PredictionGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId");
 
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId", "GroupId")
+                    b.HasIndex("PredictionGroupId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("PredictionGroupMembers", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroupSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DeadlineMinutesBeforeKickoff")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeadlineStrategy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("GlobalLockTimeUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("PredictionGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PredictionMode")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PredictionGroupId")
+                        .IsUnique();
+
+                    b.ToTable("PredictionGroupSettings", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("RevokedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RevokedReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.ScoringConfig", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ExactScorePoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MvpBonusPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OutcomeAndGoalDiffPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OutcomeOnlyPoints")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PredictionGroupSettingsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RunnerUpBonusPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ThirdPlaceBonusPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TopScorerBonusPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinnerBonusPoints")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PredictionGroupSettingsId")
+                        .IsUnique();
+
+                    b.ToTable("ScoringConfigs", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.Team", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FifaCode")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("FlagUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("TournamentGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TournamentGroupId");
+
+                    b.HasIndex("TournamentId", "FifaCode")
+                        .IsUnique();
+
+                    b.ToTable("Teams", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.Tournament", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EndDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("StartDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tournaments", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.TournamentGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TournamentId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("TournamentGroups", (string)null);
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.TournamentPrediction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PlayerCountryCode")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("PlayerName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("PointsAwarded")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("PredictionGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SubmittedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PredictionGroupId");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("TournamentId");
+
+                    b.HasIndex("UserId", "TournamentId", "PredictionGroupId", "Type")
+                        .IsUnique()
+                        .HasFilter("[PredictionGroupId] IS NOT NULL");
+
+                    b.ToTable("TournamentPredictions", (string)null);
                 });
 
             modelBuilder.Entity("Tippr.Infrastructure.Identity.ApplicationUser", b =>
@@ -435,8 +758,9 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -446,15 +770,12 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -479,23 +800,15 @@ namespace Tippr.Infrastructure.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProfilePictureUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ProfileImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -511,7 +824,7 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -565,33 +878,23 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.Group", b =>
-                {
-                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Tippr.Domain.Entities.Tournament", "Tournament")
-                        .WithMany("Groups")
-                        .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Tournament");
-                });
-
             modelBuilder.Entity("Tippr.Domain.Entities.Match", b =>
                 {
                     b.HasOne("Tippr.Domain.Entities.Team", "AwayTeam")
-                        .WithMany()
+                        .WithMany("AwayMatches")
                         .HasForeignKey("AwayTeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Tippr.Domain.Entities.Team", "HomeTeam")
-                        .WithMany()
+                        .WithMany("HomeMatches")
                         .HasForeignKey("HomeTeamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tippr.Domain.Entities.TournamentGroup", "TournamentGroup")
+                        .WithMany()
+                        .HasForeignKey("TournamentGroupId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Tippr.Domain.Entities.Tournament", "Tournament")
@@ -605,35 +908,44 @@ namespace Tippr.Infrastructure.Data.Migrations
                     b.Navigation("HomeTeam");
 
                     b.Navigation("Tournament");
+
+                    b.Navigation("TournamentGroup");
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.Prediction", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.MatchPrediction", b =>
                 {
-                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany("Predictions")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("Tippr.Domain.Entities.Group", "Group")
-                        .WithMany("Predictions")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Tippr.Domain.Entities.Match", "Match")
                         .WithMany()
                         .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tippr.Domain.Entities.PredictionGroup", "PredictionGroup")
+                        .WithMany()
+                        .HasForeignKey("PredictionGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
+
+                    b.Navigation("PredictionGroup");
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroup", b =>
+                {
+                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Group");
-
-                    b.Navigation("Match");
-                });
-
-            modelBuilder.Entity("Tippr.Domain.Entities.Team", b =>
-                {
                     b.HasOne("Tippr.Domain.Entities.Tournament", "Tournament")
-                        .WithMany("Teams")
+                        .WithMany()
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -641,15 +953,11 @@ namespace Tippr.Infrastructure.Data.Migrations
                     b.Navigation("Tournament");
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.UserGroup", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroupMember", b =>
                 {
-                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany("UserGroups")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("Tippr.Domain.Entities.Group", "Group")
-                        .WithMany("UserGroups")
-                        .HasForeignKey("GroupId")
+                    b.HasOne("Tippr.Domain.Entities.PredictionGroup", "PredictionGroup")
+                        .WithMany("Members")
+                        .HasForeignKey("PredictionGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -659,14 +967,119 @@ namespace Tippr.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("PredictionGroup");
                 });
 
-            modelBuilder.Entity("Tippr.Domain.Entities.Group", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroupSettings", b =>
                 {
-                    b.Navigation("Predictions");
+                    b.HasOne("Tippr.Domain.Entities.PredictionGroup", "PredictionGroup")
+                        .WithOne("Settings")
+                        .HasForeignKey("Tippr.Domain.Entities.PredictionGroupSettings", "PredictionGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("UserGroups");
+                    b.Navigation("PredictionGroup");
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.ScoringConfig", b =>
+                {
+                    b.HasOne("Tippr.Domain.Entities.PredictionGroupSettings", "PredictionGroupSettings")
+                        .WithOne("ScoringConfig")
+                        .HasForeignKey("Tippr.Domain.Entities.ScoringConfig", "PredictionGroupSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PredictionGroupSettings");
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.Team", b =>
+                {
+                    b.HasOne("Tippr.Domain.Entities.TournamentGroup", "TournamentGroup")
+                        .WithMany("Teams")
+                        .HasForeignKey("TournamentGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tippr.Domain.Entities.Tournament", "Tournament")
+                        .WithMany("Teams")
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tournament");
+
+                    b.Navigation("TournamentGroup");
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.TournamentGroup", b =>
+                {
+                    b.HasOne("Tippr.Domain.Entities.Tournament", "Tournament")
+                        .WithMany("Groups")
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tournament");
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.TournamentPrediction", b =>
+                {
+                    b.HasOne("Tippr.Domain.Entities.PredictionGroup", "PredictionGroup")
+                        .WithMany()
+                        .HasForeignKey("PredictionGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tippr.Domain.Entities.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tippr.Domain.Entities.Tournament", "Tournament")
+                        .WithMany()
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Tippr.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PredictionGroup");
+
+                    b.Navigation("Team");
+
+                    b.Navigation("Tournament");
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroup", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("Settings")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.PredictionGroupSettings", b =>
+                {
+                    b.Navigation("ScoringConfig")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tippr.Domain.Entities.Team", b =>
+                {
+                    b.Navigation("AwayMatches");
+
+                    b.Navigation("HomeMatches");
                 });
 
             modelBuilder.Entity("Tippr.Domain.Entities.Tournament", b =>
@@ -678,11 +1091,9 @@ namespace Tippr.Infrastructure.Data.Migrations
                     b.Navigation("Teams");
                 });
 
-            modelBuilder.Entity("Tippr.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("Tippr.Domain.Entities.TournamentGroup", b =>
                 {
-                    b.Navigation("Predictions");
-
-                    b.Navigation("UserGroups");
+                    b.Navigation("Teams");
                 });
 #pragma warning restore 612, 618
         }

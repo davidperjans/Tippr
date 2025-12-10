@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="13.1.0" />
@@ -9,6 +11,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tippr.Domain\Tippr.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authentication\Queries\" />
+    <Folder Include="Predictions\Commands\" />
+    <Folder Include="Predictions\Queries\" />
+    <Folder Include="Tournaments\Commands\" />
+    <Folder Include="Tournaments\Queries\" />
+    <Folder Include="Users\Commands\" />
   </ItemGroup>
 
   <PropertyGroup>

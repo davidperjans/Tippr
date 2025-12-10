@@ -1,68 +1,67 @@
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Tippr.Application.Interfaces.Repos;
+using Tippr.Application.Common.Interfaces.Repos;
+using Tippr.Domain.Common;
 using Tippr.Infrastructure.Data;
 
 namespace Tippr.Infrastructure.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : AuditableEntity
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
+
         public Repository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
         }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+            => await _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        public virtual async Task<IReadOnlyList<T>> ListAsync(CancellationToken cancellationToken = default)
+            => await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
+
+        public virtual async Task<IReadOnlyList<T>> ListAsync(
+            Expression<Func<T, bool>> predicate,
+            CancellationToken cancellationToken = default)
+            => await _dbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
+
+        public virtual async Task<bool> AnyAsync(
+            Expression<Func<T, bool>> predicate,
+            CancellationToken cancellationToken = default)
+            => await _dbSet.AnyAsync(predicate, cancellationToken);
+
+        public virtual async Task<int> CountAsync(
+            Expression<Func<T, bool>>? predicate = null,
+            CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(new object[] { id });
+            if (predicate is null)
+                return await _dbSet.CountAsync(cancellationToken);
+
+            return await _dbSet.CountAsync(predicate, cancellationToken);
         }
 
-        public virtual async Task<IReadOnlyList<T>> ListAllAsync()
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().ToListAsync();
+            await _dbSet.AddAsync(entity, cancellationToken);
+            return entity;
         }
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public virtual async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
-            IQueryable<T> query = _dbSet;
-
-            if (includes != null)
-            {
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
-            }
-
-            return await query.Where(predicate).ToListAsync();
+            await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public void Add(T entity)
+        public virtual void Update(T entity)
         {
-            _context.Set<T>().Add(entity);
+            _dbSet.Update(entity);
         }
 
-        public void Update(T entity)
+        public virtual void Remove(T entity)
         {
-            _context.Set<T>().Update(entity);
-        }
-
-        public void Delete(T entity)
-        {
-            _context.Set<T>().Remove(entity);
-        }
-
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return await _context.SaveChangesAsync(cancellationToken);
+            _dbSet.Remove(entity);
         }
     }
 }

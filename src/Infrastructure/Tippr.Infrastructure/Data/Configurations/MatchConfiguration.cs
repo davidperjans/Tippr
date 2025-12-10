@@ -8,19 +8,28 @@ namespace Tippr.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Match> builder)
         {
+            builder.ToTable("Matches");
+
             builder.HasKey(m => m.Id);
 
-            // Relation: HomeTeam
-            builder.HasOne(m => m.HomeTeam)
-                .WithMany()
-                .HasForeignKey(m => m.HomeTeamId)
-                .OnDelete(DeleteBehavior.Restrict); // VIKTIGT: Restrict, ej Cascade
+            builder.Property(m => m.Stadium)
+                .HasMaxLength(200);
 
-            // Relation: AwayTeam
-            builder.HasOne(m => m.AwayTeam)
+            builder.Property(m => m.City)
+                .HasMaxLength(200);
+
+            builder.Property(m => m.Stage)
+                .HasConversion<int>();
+
+            builder.Property(m => m.Status)
+                .HasConversion<int>();
+
+            builder.HasOne(m => m.TournamentGroup)
                 .WithMany()
-                .HasForeignKey(m => m.AwayTeamId)
-                .OnDelete(DeleteBehavior.Restrict); // VIKTIGT: Restrict, ej Cascade
+                .HasForeignKey(m => m.TournamentGroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(m => new { m.TournamentId, m.KickoffUtc });
         }
     }
 }

@@ -20,6 +20,8 @@ namespace Tippr.Application
 
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             });
+
+            services.AddAutoMapper(assembly);
             
 
             return services;
