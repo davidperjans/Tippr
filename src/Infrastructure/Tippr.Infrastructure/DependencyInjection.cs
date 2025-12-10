@@ -29,8 +29,9 @@ namespace Tippr.Infrastructure
             //                      Repositories
             // ===================================================
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IPredictionGroupRepository, PredictionGroupRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPredictionGroupRepository, PredictionGroupRepository>();
+            services.AddScoped<ITournamentRepository, TournamentRepository>();
 
             // ===================================================
             //                      Services
@@ -66,7 +67,7 @@ namespace Tippr.Infrastructure
             services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
 
             var jwtSettings = config.GetSection("JwtSettings");
-            var secretKey = jwtSettings["SecretKey"];
+            var secretKey = jwtSettings["SigningKey"];
 
             services.AddAuthentication(options =>
             {
