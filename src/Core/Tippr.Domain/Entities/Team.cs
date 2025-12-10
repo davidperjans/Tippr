@@ -1,18 +1,21 @@
+using System.Text.RegularExpressions;
 using Tippr.Domain.Common;
 
 namespace Tippr.Domain.Entities
 {
-    public class Team : BaseEntity, IAuditableEntity
+    public class Team : AuditableEntity
     {
-        public string Name { get; set; } = string.Empty;     // T.ex. "Sweden"
-        public string ShortName { get; set; } = string.Empty; // T.ex. "SWE"
-        public string? FlagUrl { get; set; }
-        public string? GroupLetter { get; set; } // T.ex. "A" (för gruppspelet i VM)
+        public Guid TournamentId { get; set; }
+        public Tournament Tournament { get; set; } = null!;
 
-        public int TournamentId { get; set; }
-        public Tournament? Tournament { get; set; }
+        public Guid? TournamentGroupId { get; set; }
+        public TournamentGroup? TournamentGroup { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public string Name { get; set; } = string.Empty;      // "Germany"
+        public string FifaCode { get; set; } = string.Empty;  // "GER"
+        public string FlagUrl { get; set; } = string.Empty;
+
+        public ICollection<Match> HomeMatches { get; set; } = new List<Match>();
+        public ICollection<Match> AwayMatches { get; set; } = new List<Match>();
     }
 }

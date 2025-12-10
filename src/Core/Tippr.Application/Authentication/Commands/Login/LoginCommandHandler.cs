@@ -1,23 +1,25 @@
 using MediatR;
-using Tippr.Application.Authentication.Commands.Register;
 using Tippr.Application.Authentication.Common;
+using Tippr.Application.Common;
+using Tippr.Application.Common.Interfaces.Services;
 
 namespace Tippr.Application.Authentication.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthenticationResult>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResponseDto>>
     {
-        private readonly IAuthenticationService _authService;
-        public LoginCommandHandler(IAuthenticationService authService)
+        private readonly IAuthService _authService;
+
+        public LoginCommandHandler(IAuthService authService)
         {
             _authService = authService;
         }
 
-        public async Task<AuthenticationResult> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public Task<Result<AuthResponseDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            return await _authService.LoginAsync(
+            return _authService.LoginAsync(
                 request.Email,
-                request.Password
-            );
+                request.Password,
+                cancellationToken);
         }
     }
 }

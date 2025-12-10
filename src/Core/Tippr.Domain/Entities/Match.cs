@@ -3,28 +3,33 @@ using Tippr.Domain.Enums;
 
 namespace Tippr.Domain.Entities
 {
-    public class Match : BaseEntity, IAuditableEntity
+    public class Match : AuditableEntity
     {
-        public int TournamentId { get; set; }
-        public Tournament? Tournament { get; set; }
+        public Guid TournamentId { get; set; }
+        public Tournament Tournament { get; set; } = null!;
 
-        // Kan vara null om lagen inte är bestämda än (slutspel)
-        public int? HomeTeamId { get; set; }
-        public Team? HomeTeam { get; set; }
+        public Guid? TournamentGroupId { get; set; }
+        public TournamentGroup? TournamentGroup { get; set; }
 
-        public int? AwayTeamId { get; set; }
-        public Team? AwayTeam { get; set; }
+        public Guid HomeTeamId { get; set; }
+        public Team HomeTeam { get; set; } = null!;
 
-        public DateTime MatchDate { get; set; }
-        public string? Venue { get; set; }
-        public MatchStage Stage { get; set; } // Gruppspel, Final etc.
+        public Guid AwayTeamId { get; set; }
+        public Team AwayTeam { get; set; } = null!;
 
-        // Resultat
-        public int? HomeTeamScore { get; set; }
-        public int? AwayTeamScore { get; set; }
-        public bool IsCompleted { get; set; } = false;
+        public DateTime KickoffUtc { get; set; }
+        public string Stadium { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public MatchStage Stage { get; set; }
+        public MatchStatus Status { get; set; }
+
+        // Resultat (null tills matchen är spelad)
+        public int? HomeScore { get; set; }
+        public int? AwayScore { get; set; }
+
+        // För bracket-logik (knockout)
+        public Guid? ParentMatchHomeId { get; set; }
+        public Guid? ParentMatchAwayId { get; set; }
     }
 }
