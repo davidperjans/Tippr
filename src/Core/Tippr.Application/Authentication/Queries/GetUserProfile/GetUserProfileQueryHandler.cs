@@ -1,6 +1,6 @@
 using MediatR;
 using Tippr.Application.DTOs.User;
-using Tippr.Application.Interfaces;
+using Tippr.Application.Interfaces.Services;
 
 namespace Tippr.Application.Authentication.Queries.GetUserProfile
 {

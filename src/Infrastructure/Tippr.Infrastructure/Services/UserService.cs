@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Tippr.Application.DTOs.User;
 using Tippr.Application.Exceptions;
-using Tippr.Application.Interfaces;
+using Tippr.Application.Interfaces.Services;
 using Tippr.Infrastructure.Identity;
 
 namespace Tippr.Infrastructure.Services

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tippr.Application.DTOs.User;
 
-namespace Tippr.Application.Interfaces
+namespace Tippr.Application.Interfaces.Services
 {
     public interface IUserService
     {
