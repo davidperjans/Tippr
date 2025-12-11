@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Tippr.API.Middleware;
 using Tippr.Application;
 using Tippr.Infrastructure;
+using Tippr.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +87,35 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+        // 1. Skapa Admin-rollen om den inte finns
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        // 2. Hitta din användare (byt ut mot din email)
+        var myUser = await userManager.FindByEmailAsync("perjansdavid@gmail.com");
+
+        // 3. Lägg till användaren i rollen om den inte redan är med
+        if (myUser != null && !await userManager.IsInRoleAsync(myUser, "Admin"))
+        {
+            await userManager.AddToRoleAsync(myUser, "Admin");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Kunde inte skapa roller: {ex.Message}");
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {

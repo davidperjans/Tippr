@@ -61,17 +61,7 @@ namespace Tippr.Application.Groups.Commands.CreateGroup
             };
 
             // Default settings
-            var scoring = new ScoringConfig
-            {
-                ExactScorePoints = 3,
-                OutcomeAndGoalDiffPoints = 2,
-                OutcomeOnlyPoints = 1,
-                WinnerBonusPoints = 5,
-                RunnerUpBonusPoints = 3,
-                ThirdPlaceBonusPoints = 2,
-                MvpBonusPoints = 5,
-                TopScorerBonusPoints = 5
-            };
+            var scoringConfig = new ScoringConfig();
 
             var settings = new PredictionGroupSettings
             {
@@ -79,7 +69,7 @@ namespace Tippr.Application.Groups.Commands.CreateGroup
                 PredictionMode = PredictionMode.BeforeEatchMatch,
                 DeadlineStrategy = PredictionDeadlineStrategy.FixedMinutesBeforeKickoff,
                 DeadlineMinutesBeforeKickoff = 5,
-                ScoringConfig = scoring
+                ScoringConfig = scoringConfig
             };
 
             group.Settings = settings;

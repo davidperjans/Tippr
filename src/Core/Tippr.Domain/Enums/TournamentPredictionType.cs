@@ -6,6 +6,9 @@ namespace Tippr.Domain.Enums
         RunnerUp = 1,
         ThirdPlace = 2,
         MostValuablePlayer = 3,
-        TopScorer = 4
+        TopScorer = 4,
+
+        MostGoalsInGroupStageTeam = 5,
+        MostConcededInGroupStageTeam = 6
     }
 }

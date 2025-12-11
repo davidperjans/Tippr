@@ -47,17 +47,7 @@ namespace Tippr.Application.Tests.PredictionGroups
                     PredictionMode = PredictionMode.BeforeEatchMatch,
                     DeadlineStrategy = PredictionDeadlineStrategy.FixedMinutesBeforeKickoff,
                     DeadlineMinutesBeforeKickoff = 5,
-                    ScoringConfig = new ScoringConfig
-                    {
-                        ExactScorePoints = 3,
-                        OutcomeAndGoalDiffPoints = 2,
-                        OutcomeOnlyPoints = 1,
-                        WinnerBonusPoints = 5,
-                        RunnerUpBonusPoints = 3,
-                        ThirdPlaceBonusPoints = 2,
-                        MvpBonusPoints = 5,
-                        TopScorerBonusPoints = 5
-                    }
+                    ScoringConfig = new ScoringConfig()
                 },
                 Members =
             {
