@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Tippr.Application.Authentication.Common;
 using Tippr.Application.Common;
 using Tippr.Application.Common.Interfaces.Services;
@@ -154,7 +155,7 @@ namespace Tippr.Infrastructure.Services
             await _dbContext.RefreshTokens.AddAsync(newRefreshToken, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            var accessToken = GenerateJwtToken(user);
+            var accessToken = await GenerateJwtToken(user);
             var expiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
 
             var authUserDto = MapToAuthUserDto(user);
@@ -230,7 +231,7 @@ namespace Tippr.Infrastructure.Services
 
         private async Task<AuthResponseDto> GenerateAuthResponseAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            var accessToken = GenerateJwtToken(user);
+            var accessToken = await GenerateJwtToken(user);
             var expiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
 
             var refreshToken = CreateRefreshToken(user.Id);
@@ -248,7 +249,7 @@ namespace Tippr.Infrastructure.Services
             };
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+        private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SigningKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -261,6 +262,12 @@ namespace Tippr.Infrastructure.Services
                 new(ClaimTypes.Name, user.UserName ?? string.Empty),
                 new(ClaimTypes.Email, user.Email ?? string.Empty)
             };
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,

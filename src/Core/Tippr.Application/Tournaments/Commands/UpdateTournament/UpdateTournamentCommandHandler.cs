@@ -21,20 +21,20 @@ namespace Tippr.Application.Tournaments.Commands.UpdateTournament
 
         public async Task<Result<TournamentDto>> Handle(UpdateTournamentCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _tournamentRepository.GetByIdAsync(request.Id, cancellationToken);
+            var tournament = await _tournamentRepository.GetByIdAsync(request.Id, cancellationToken);
 
-            if (entity == null)
+            if (tournament == null)
                 return Result<TournamentDto>.Failure("Tournament not found.");
 
-            entity.Name = request.Name;
-            entity.Year = request.Year;
-            entity.StartDateUtc = request.StartDateUtc;
-            entity.EndDateUtc = request.EndDateUtc;
+            tournament.Name = request.Name;
+            tournament.Year = request.Year;
+            tournament.StartDateUtc = request.StartDateUtc;
+            tournament.EndDateUtc = request.EndDateUtc;
 
-            _tournamentRepository.Update(entity);
+            _tournamentRepository.Update(tournament);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var dto = _mapper.Map<TournamentDto>(entity);
+            var dto = _mapper.Map<TournamentDto>(tournament);
 
             return Result<TournamentDto>.Success(dto);
         }

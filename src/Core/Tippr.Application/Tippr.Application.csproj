@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Folder Include="Authentication\Queries\" />
+    <Folder Include="Matches\Queries\" />
     <Folder Include="Predictions\Commands\" />
     <Folder Include="Predictions\Queries\" />
     <Folder Include="Users\Commands\" />
