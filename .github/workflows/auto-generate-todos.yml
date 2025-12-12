@@ -17,6 +17,7 @@ jobs:
       - name: "TODO to Issue"
         uses: alstr/todo-to-issue-action@v5
         with:
-          INSERT_ISSUE_URLS: "true"
+          INSERT_ISSUE_URLS: "false"
           CLOSE_ISSUES: "true"
           AUTO_ASSIGN: "true"
+          LABELS: "type: todo"
