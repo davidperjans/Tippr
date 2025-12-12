@@ -13,8 +13,8 @@ namespace Tippr.API.Controllers
     [Authorize]
     public class TournamentsController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public TournamentsController(IMediator mediator)
+        private readonly ISender _mediator;
+        public TournamentsController(ISender mediator)
         {
             _mediator = mediator;
         }

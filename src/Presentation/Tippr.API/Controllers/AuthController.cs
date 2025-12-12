@@ -18,8 +18,8 @@ namespace Tippr.API.Controllers
     [Route("api/v1/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public AuthController(IMediator mediator)
+        private readonly ISender _mediator;
+        public AuthController(ISender mediator)
         {
             _mediator = mediator;
         }

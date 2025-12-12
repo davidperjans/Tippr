@@ -16,8 +16,8 @@ namespace Tippr.API.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminMatchesController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public AdminMatchesController(IMediator mediator)
+        private readonly ISender _mediator;
+        public AdminMatchesController(ISender mediator)
         {
             _mediator = mediator;
         }

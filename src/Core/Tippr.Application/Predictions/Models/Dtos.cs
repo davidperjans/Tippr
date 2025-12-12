@@ -2,17 +2,17 @@ using Tippr.Domain.Enums;
 
 namespace Tippr.Application.Predictions.Models
 {
-    public record MatchPredictionDto(
-        Guid Id,
-        Guid MatchId,
-        Guid? PredictionGroupId,
-        string UserId,
-        int PredictedHomeScore,
-        int PredictedAwayScore,
-        DateTime SubmittedAtUtc,
-        int? PointsAwarded,
-        PredictionResultStatus Status
-    );
+    public record MatchPredictionDto
+    {
+        public Guid Id { get; init; }
+        public Guid MatchId { get; init; }
+        public Guid? PredictionGroupId { get; init; }
+        public int PredictedHomeScore { get; init; }
+        public int PredictedAwayScore { get; init; }
+        public DateTime SubmittedAtUtc { get; init; }
+        public int? PointsAwarded { get; init; }
+        public PredictionResultStatus Status { get; init; }
+    }
 
     public record TournamentPredictionDto(
         Guid Id,
