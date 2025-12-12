@@ -16,8 +16,8 @@ namespace Tippr.API.Controllers
     [Authorize]
     public class PredictionGroupsController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public PredictionGroupsController(IMediator mediator)
+        private readonly ISender _mediator;
+        public PredictionGroupsController(ISender mediator)
         {
             _mediator = mediator;
         }

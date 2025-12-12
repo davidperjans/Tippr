@@ -3,9 +3,9 @@ namespace Tippr.Domain.Enums
     public enum PredictionResultStatus
     {
         Pending = 0,
-        CorrectExactScore = 1,
-        CorrectOutcomeAndDiff = 2,
-        CorrectOutcome = 3,
-        Incorrect = 4
+        ExactScore = 1,
+        CorrectOutcome = 2,
+        PartialScore = 3,
+        Wrong = 4
     }
 }
