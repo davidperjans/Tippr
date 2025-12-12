@@ -1,0 +1,56 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+version-resolver:
+  major:
+    labels:
+      - 'type: breaking'
+  minor:
+    labels:
+      - 'type: feature'
+      - 'type: enhancement'
+  patch:
+    labels:
+      - 'type: bug'
+      - 'type: chore'
+      - 'type: refactor'
+      - 'type: security'
+      - 'type: docs'
+      - 'type: test'
+  default: patch
+
+categories:
+  - title: '🚀 New Features'
+    labels:
+      - 'type: feature'
+      - 'epic: admin'
+      - 'epic: leaderboard'
+      - 'epic: tournament'
+      - 'epic: predictions'
+
+  - title: '✨ Enhancements'
+    labels:
+      - 'type: enhancement'
+      - 'area: ui-ux'
+
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'type: bug'
+      - 'priority: critical'
+      - 'priority: high'
+
+  - title: '🔒 Security'
+    labels:
+      - 'type: security'
+      - 'area: auth'
+
+  - title: '📦 Infrastructure & Maintenance'
+    labels:
+      - 'type: chore'
+      - 'type: refactor'
+      - 'area: devops'
+      - 'area: backend'
+      - 'area: database'
+
+exclude-labels:
+  - 'type: todo'
