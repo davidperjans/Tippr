@@ -1,0 +1,35 @@
+name: "Check PR Labels"
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+
+jobs:
+  validate-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR Label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            
+            const validLabels = [
+              'type: feature',
+              'type: enhancement',
+              'type: bug',
+              'type: chore',
+              'type: refactor',
+              'type: security',
+              'type: docs',
+              'type: test',
+              'type: breaking'
+            ];
+
+            const hasValidLabel = labels.some(l => validLabels.includes(l));
+
+            if (!hasValidLabel) {
+              core.setFailed('⛔ Stopp! Du måste sätta en label (t.ex. type: feature eller type: bug) för att Release Drafter ska veta vilken version det blir.');
+            } else {
+              console.log('✅ Bra jobbat! Rätt label hittad.');
+            }
